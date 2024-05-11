@@ -16,7 +16,7 @@ public class ServerCountryFlagsNeoforged {
             ServerCountryFlags.init();
 
             if (ClothConfigCheck.isInstalled()) {
-                ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> ClothConfigScreenMaker::create);
+                ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (modContainer, screen) -> ClothConfigScreenMaker.create(screen));
             }
         }
     }
