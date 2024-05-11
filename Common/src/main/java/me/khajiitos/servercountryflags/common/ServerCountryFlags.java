@@ -158,8 +158,18 @@ public class ServerCountryFlags {
 	}
 
 	public static void updateServerLocationInfo(String serverAddress) {
+		final String cleanServerAddress;
+		// Prefixes used by the Raknetify mod
+		if (serverAddress.startsWith("raknet;")) {
+			cleanServerAddress = serverAddress.substring("raknet;".length());
+		} else if (serverAddress.startsWith("raknetl;")) {
+			cleanServerAddress = serverAddress.substring("raknetl;".length());
+		} else {
+			cleanServerAddress = serverAddress;
+		}
+
 		CompletableFuture.runAsync(() -> {
-			ServerAddress address = ServerAddress.parseString(serverAddress);
+			ServerAddress address = ServerAddress.parseString(cleanServerAddress);
 			if (Config.cfg.resolveRedirects) {
 				Optional<ServerAddress> redirect = redirectResolver.lookupRedirect(address);
 
