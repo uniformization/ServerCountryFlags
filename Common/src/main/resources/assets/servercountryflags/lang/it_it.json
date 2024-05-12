@@ -15,7 +15,7 @@
   "servercountryflags.config.header": "Configurazione delle bandiere nazionali del server",
 
   "servercountryflags.config.field.flagPosition.name": "Posizione bandiera",
-  "servercountryflags.config.field.flagPosition.description": "Gestisci la posizione della bandiera. Opzioni disponibili: sinistra, destra, dietro il nome, in basso a destra, tooltipServerName, tooltipPing",
+  "servercountryflags.config.field.flagPosition.description": "Gestisci la posizione della bandiera. Opzioni disponibili: left, right, behindName, bottomRight, tooltipServerName, tooltipPing",
   "servercountryflags.config.field.flagPosition.value.behindName": "Dietro il nome",
   "servercountryflags.config.field.flagPosition.value.left": "Sinistra",
   "servercountryflags.config.field.flagPosition.value.right": "Destra",
