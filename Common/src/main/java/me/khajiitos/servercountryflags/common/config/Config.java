@@ -54,7 +54,7 @@ public class Config {
         public boolean mapButtonRight = true;
 
         @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
-        public boolean showHomeOnMap = true;
+        public boolean showHomeOnMap = false;
 
         @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
         public boolean resolveRedirects = true;
