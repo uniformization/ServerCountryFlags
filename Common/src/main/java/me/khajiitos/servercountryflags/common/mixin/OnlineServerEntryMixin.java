@@ -25,7 +25,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mixin(ServerSelectionList.OnlineServerEntry.class)
 public class OnlineServerEntryMixin {
@@ -104,7 +103,7 @@ public class OnlineServerEntryMixin {
             }
         }
 
-        ResourceLocation textureId = new ResourceLocation(ServerCountryFlags.MOD_ID, "textures/gui/flags/" + flagRenderInfo.countryCode() + ".png");
+        ResourceLocation textureId = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/flags/" + flagRenderInfo.countryCode() + ".png");
 
         RenderSystem.enableBlend();
         guiGraphics.pose().pushPose();

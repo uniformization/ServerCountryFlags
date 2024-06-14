@@ -24,14 +24,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class JoinMultiplayerScreenMixin extends Screen {
     @Unique
     private static final WidgetSprites MAP_BUTTON_SPRITES = new WidgetSprites(
-            new ResourceLocation(ServerCountryFlags.MOD_ID, "widget/map_button"),
-            new ResourceLocation(ServerCountryFlags.MOD_ID, "widget/map_button_focused")
+            ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "widget/map_button"),
+            ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "widget/map_button_focused")
     );
 
     @Unique
     private static final WidgetSprites MAP_BUTTON_SPRITES_HIGH_CONTRAST = new WidgetSprites(
-            new ResourceLocation(ServerCountryFlags.MOD_ID, "widget/map_button_high_contrast"),
-            new ResourceLocation(ServerCountryFlags.MOD_ID, "widget/map_button_focused_high_contrast")
+            ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "widget/map_button_high_contrast"),
+            ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "widget/map_button_focused_high_contrast")
     );
 
     @Shadow

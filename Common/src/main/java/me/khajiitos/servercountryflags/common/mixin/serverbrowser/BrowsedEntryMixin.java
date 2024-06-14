@@ -1,29 +1,8 @@
 package me.khajiitos.servercountryflags.common.mixin.serverbrowser;
 
 import com.epherical.serverbrowser.client.list.ServerBrowserList;
-import com.epherical.serverbrowser.client.screen.ServerBrowserScreen;
-import com.mojang.blaze3d.systems.RenderSystem;
-import me.khajiitos.servercountryflags.common.ServerCountryFlags;
-import me.khajiitos.servercountryflags.common.config.Config;
-import me.khajiitos.servercountryflags.common.util.APIResponse;
-import me.khajiitos.servercountryflags.common.util.FlagPosition;
-import me.khajiitos.servercountryflags.common.util.FlagRenderInfo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Pseudo
 @Mixin(ServerBrowserList.BrowsedEntry.class)
@@ -115,7 +94,7 @@ public class BrowsedEntryMixin {
             }
         }
 
-        ResourceLocation textureId = new ResourceLocation(ServerCountryFlags.MOD_ID, "textures/flags/" + flagRenderInfo.countryCode() + ".png");
+        ResourceLocation textureId = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/flags/" + flagRenderInfo.countryCode() + ".png");
 
         RenderSystem.enableBlend();
         guiGraphics.pose().pushPose();

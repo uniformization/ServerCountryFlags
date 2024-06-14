@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ServerMapScreen extends Screen {
-    public static final ResourceLocation MAP_TEXTURE = new ResourceLocation(ServerCountryFlags.MOD_ID, "textures/gui/misc/map.png");
-    public static final ResourceLocation POINT_TEXTURE = new ResourceLocation(ServerCountryFlags.MOD_ID, "textures/gui/misc/point.png");
-    public static final ResourceLocation POINT_HOVERED_TEXTURE = new ResourceLocation(ServerCountryFlags.MOD_ID, "textures/gui/misc/point_hovered.png");
-    public static final ResourceLocation POINT_HOME_TEXTURE = new ResourceLocation(ServerCountryFlags.MOD_ID, "textures/gui/misc/point_home.png");
+    public static final ResourceLocation MAP_TEXTURE = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/misc/map.png");
+    public static final ResourceLocation POINT_TEXTURE = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/misc/point.png");
+    public static final ResourceLocation POINT_HOVERED_TEXTURE = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/misc/point_hovered.png");
+    public static final ResourceLocation POINT_HOME_TEXTURE = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/misc/point_home.png");
     public static final double MAP_TEXTURE_ASPECT = 3600.0 / 1800.0;
     public static final double POINT_TEXTURE_ASPECT = 526.0 / 754.0;
     public static final double ZOOM_STRENGTH = 0.1;
@@ -281,7 +281,7 @@ public class ServerMapScreen extends Screen {
 
         public List<FormattedCharSequence> getTooltip() {
             List<FormattedCharSequence> list = new ArrayList<>();
-            list.add(Component.literal((Config.cfg.showDistrict && !locationInfo.districtName.equals("") ? (locationInfo.districtName + ", ") : "") + locationInfo.cityName + ", " + locationInfo.countryName).withStyle(ChatFormatting.BOLD).getVisualOrderText());
+            list.add(Component.literal((Config.cfg.showDistrict && !locationInfo.districtName.isEmpty() ? (locationInfo.districtName + ", ") : "") + locationInfo.cityName + ", " + locationInfo.countryName).withStyle(ChatFormatting.BOLD).getVisualOrderText());
             list.add(Component.nullToEmpty(null).getVisualOrderText());
 
             for (String server : this.servers) {
