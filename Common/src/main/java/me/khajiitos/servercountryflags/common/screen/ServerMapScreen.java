@@ -250,7 +250,7 @@ public class ServerMapScreen extends Screen {
         // Syncs the location infos from the server list to here
         this.points.clear();
 
-        if (ServerCountryFlags.localLocation != null) {
+        if (Config.cfg.showHomeOnMap && ServerCountryFlags.localLocation != null) {
             addPoint(null, ServerCountryFlags.localLocation);
         }
 
