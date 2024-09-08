@@ -205,18 +205,17 @@ public class ServerMapScreen extends Screen {
         int pointHeight = mapHeight / 20;
         int pointWidth = (int)(pointHeight * POINT_TEXTURE_ASPECT);
 
-        for (int i = points.size() - 1; i >= 0; i--) {
-            Point point = points.get(i);
-            Coordinates coords = latlonToPos(point.locationInfo.latitude, point.locationInfo.longitude, mapWidth, mapHeight);
-            int pointStartX = mapStartX + coords.x - (pointWidth / 2);
-            int pointStartY = mapStartY + coords.y - pointHeight;
+        if (mouseX >= mapStartX && mouseX <= mapStartX + mapWidth && mouseY >= mapStartY && mouseY <= mapStartY + mapHeight) {
+            for (int i = points.size() - 1; i >= 0; i--) {
+                Point point = points.get(i);
+                Coordinates coords = latlonToPos(point.locationInfo.latitude, point.locationInfo.longitude, mapWidth, mapHeight);
+                double pointStartX = mapStartX + coords.x - (pointWidth / 2.0);
+                double pointStartY = mapStartY + coords.y - pointHeight;
 
-            if (coords.x < 0 || coords.x > mapWidth - (pointWidth / 2) || coords.y < pointHeight || coords.y > mapHeight)
-                continue;
-
-            if (mouseX >= pointStartX && mouseX <= pointStartX + pointWidth && mouseY >= pointStartY && mouseY <= pointStartY + pointHeight) {
-                hoveredPoint = point;
-                break;
+                if (mouseX >= pointStartX && mouseX <= pointStartX + pointWidth && mouseY >= pointStartY && mouseY <= pointStartY + pointHeight) {
+                    hoveredPoint = point;
+                    break;
+                }
             }
         }
 
@@ -298,10 +297,10 @@ public class ServerMapScreen extends Screen {
             Coordinates coords = latlonToPos(this.locationInfo.latitude, this.locationInfo.longitude, mapWidth, mapHeight);
             int pointHeight = mapHeight / 20;
             int pointWidth = (int)(pointHeight * POINT_TEXTURE_ASPECT);
-            int pointStartX = mapStartX + coords.x - (pointWidth / 2);
-            int pointStartY = mapStartY + coords.y - pointHeight;
+            double pointStartX = mapStartX + coords.x - (pointWidth / 2.0);
+            double pointStartY = mapStartY + coords.y - pointHeight;
 
-            if (coords.x < 0 || coords.x > mapWidth - (pointWidth / 2) || coords.y < pointHeight || coords.y > mapHeight)
+            if (coords.x < -(pointWidth / 2.0) || coords.x > mapWidth + (pointWidth / 2.0) || coords.y < 0 || coords.y > mapHeight + pointHeight)
                 return;
 
             ResourceLocation texture = POINT_TEXTURE;
@@ -312,22 +311,28 @@ public class ServerMapScreen extends Screen {
                 texture = POINT_HOVERED_TEXTURE;
             }
 
-            context.blit(texture, pointStartX, pointStartY, 0, 0, pointWidth, pointHeight, pointWidth, pointHeight);
+            context.enableScissor(mapStartX, mapStartY, mapStartX + mapWidth, mapStartY + mapHeight);
+            // Blitting at 0, 0 and translating with doubles, because we need more precision than int scaled pixels
+            context.pose().pushPose();
+            context.pose().translate(pointStartX, pointStartY, 0);
+            context.blit(texture, 0, 0, 0, 0, pointWidth, pointHeight, pointWidth, pointHeight);
+            context.pose().popPose();
+            context.disableScissor();
         }
     }
 
     public static class Coordinates {
-        public int x, y;
+        public double x, y;
 
-        public Coordinates(int x, int y) {
+        public Coordinates(double x, double y) {
             this.x = x;
             this.y = y;
         }
     }
 
     private Coordinates latlonToPos(double lat, double lon, int width, int height) {
-        int x = (int)(width * (((180.0 + lon) / 360.0 - zoomedAreaStartX) / zoomedAreaHeight));
-        int y = (int)(height * (((90.0 - lat) / 180.0 - zoomedAreaStartY) / zoomedAreaWidth));
+        double x = width * (((180.0 + lon) / 360.0 - zoomedAreaStartX) / zoomedAreaHeight);
+        double y = height * (((90.0 - lat) / 180.0 - zoomedAreaStartY) / zoomedAreaWidth);
         return new Coordinates(x, y);
     }
 }
