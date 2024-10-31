@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -107,7 +108,7 @@ public class OnlineServerEntryMixin {
 
         RenderSystem.enableBlend();
         guiGraphics.pose().pushPose();
-        guiGraphics.blit(textureId, startingX, startingY, 100, 0.0F, 0.0F, width, height, width, height);
+        guiGraphics.blit(RenderType::guiTextured, textureId, startingX, startingY, 0.0F, 0.F, width, height, width, height);
         guiGraphics.pose().popPose();
 
         if (Config.cfg.flagBorder) {
