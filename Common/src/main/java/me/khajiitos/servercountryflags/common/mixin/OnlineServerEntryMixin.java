@@ -40,7 +40,7 @@ public class OnlineServerEntryMixin {
 
     @Shadow @Final private Minecraft minecraft;
 
-    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I", ordinal = 0), method = "render", index = 2)
+    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)I", ordinal = 0), method = "render", index = 2)
     public int serverNameX(int oldX) {
         if (Config.cfg.flagPosition == FlagPosition.BEHIND_NAME) {
             APIResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);

@@ -16,7 +16,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -197,8 +196,8 @@ public class ServerMapScreen extends Screen {
         mapStartY = 32 + ((this.height - 64) / 2 - mapHeight / 2);
 
         // TODO: this doesn't seem to work anymore
-        RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        //RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        //RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
         context.blit(RenderType::guiTextured, MAP_TEXTURE, mapStartX, mapStartY, (float)(mapWidth * zoomedAreaStartX), (float)(mapHeight * zoomedAreaStartY), mapWidth, mapHeight, (int)(mapWidth * zoomedAreaWidth), (int)(mapHeight * zoomedAreaHeight), mapWidth, mapHeight);
         Point hoveredPoint = null;
