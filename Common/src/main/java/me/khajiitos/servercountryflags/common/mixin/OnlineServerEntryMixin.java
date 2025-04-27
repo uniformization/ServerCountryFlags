@@ -1,6 +1,5 @@
 package me.khajiitos.servercountryflags.common.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import me.khajiitos.servercountryflags.common.ServerCountryFlags;
 import me.khajiitos.servercountryflags.common.config.Config;
 import me.khajiitos.servercountryflags.common.util.APIResponse;
@@ -106,7 +105,7 @@ public class OnlineServerEntryMixin {
 
         ResourceLocation textureId = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/flags/" + flagRenderInfo.countryCode() + ".png");
 
-        RenderSystem.enableBlend();
+        //RenderSystem.enableBlend();
         guiGraphics.pose().pushPose();
         guiGraphics.blit(RenderType::guiTextured, textureId, startingX, startingY, 0.0F, 0.F, width, height, width, height);
         guiGraphics.pose().popPose();
@@ -115,7 +114,7 @@ public class OnlineServerEntryMixin {
             guiGraphics.renderOutline(startingX - 1, startingY - 1, width + 2, height + 2, Config.cfg.borderColor.toARGB());
         }
 
-        RenderSystem.disableBlend();
+        //RenderSystem.disableBlend();
 
         if (mouseX >= startingX && mouseX <= startingX + width && mouseY >= startingY && mouseY <= startingY + height) {
             screen.setTooltipForNextRenderPass(flagRenderInfo.tooltip());

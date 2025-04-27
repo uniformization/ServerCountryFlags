@@ -1,6 +1,5 @@
 package me.khajiitos.servercountryflags.common.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import me.khajiitos.servercountryflags.common.ServerCountryFlags;
 import me.khajiitos.servercountryflags.common.config.Config;
 import me.khajiitos.servercountryflags.common.util.APIResponse;
@@ -227,7 +226,7 @@ public class ServerMapScreen extends Screen {
             this.setTooltipForNextRenderPass(hoveredPoint.getTooltip());
         }
 
-        RenderSystem.disableBlend();
+        //RenderSystem.disableBlend();
     }
 
     public void onClose() {
