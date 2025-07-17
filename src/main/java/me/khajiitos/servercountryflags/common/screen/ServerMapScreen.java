@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -198,7 +199,7 @@ public class ServerMapScreen extends Screen {
         //RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         //RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
-        context.blit(RenderType::guiTextured, MAP_TEXTURE, mapStartX, mapStartY, (float)(mapWidth * zoomedAreaStartX), (float)(mapHeight * zoomedAreaStartY), mapWidth, mapHeight, (int)(mapWidth * zoomedAreaWidth), (int)(mapHeight * zoomedAreaHeight), mapWidth, mapHeight);
+        context.blit(RenderPipelines.GUI_TEXTURED, MAP_TEXTURE, mapStartX, mapStartY, (float)(mapWidth * zoomedAreaStartX), (float)(mapHeight * zoomedAreaStartY), mapWidth, mapHeight, (int)(mapWidth * zoomedAreaWidth), (int)(mapHeight * zoomedAreaHeight), mapWidth, mapHeight);
         Point hoveredPoint = null;
 
         int pointHeight = mapHeight / 20;
@@ -223,7 +224,7 @@ public class ServerMapScreen extends Screen {
         }
 
         if (hoveredPoint != null) {
-            this.setTooltipForNextRenderPass(hoveredPoint.getTooltip());
+            context.setTooltipForNextFrame(hoveredPoint.getTooltip(), mouseX, mouseY);
         }
 
         //RenderSystem.disableBlend();
@@ -312,10 +313,10 @@ public class ServerMapScreen extends Screen {
 
             context.enableScissor(mapStartX, mapStartY, mapStartX + mapWidth, mapStartY + mapHeight);
             // Blitting at 0, 0 and translating with doubles, because we need more precision than int scaled pixels
-            context.pose().pushPose();
-            context.pose().translate(pointStartX, pointStartY, 0);
-            context.blit(RenderType::guiTextured, texture, 0, 0, 0, 0, pointWidth, pointHeight, pointWidth, pointHeight);
-            context.pose().popPose();
+            context.pose().pushMatrix();
+            context.pose().translate((float) pointStartX, (float) pointStartY);
+            context.blit(RenderPipelines.GUI_TEXTURED, texture, 0, 0, 0, 0, pointWidth, pointHeight, pointWidth, pointHeight);
+            context.pose().popMatrix();
             context.disableScissor();
         }
     }

@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +40,7 @@ public class OnlineServerEntryMixin {
 
     @Shadow @Final private Minecraft minecraft;
 
-    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)I", ordinal = 0), method = "render", index = 2)
+    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V", ordinal = 0), method = "render", index = 2)
     public int serverNameX(int oldX) {
         if (Config.cfg.flagPosition == FlagPosition.BEHIND_NAME) {
             APIResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
@@ -70,7 +71,7 @@ public class OnlineServerEntryMixin {
             int serverNameHeight = 8;
 
             if (mouseX >= serverNameStartX && mouseX <= serverNameStartX + serverNameWidth && mouseY >= serverNameStartY && mouseY <= serverNameStartY + serverNameHeight) {
-                screen.setTooltipForNextRenderPass(flagRenderInfo.tooltip());
+                guiGraphics.setTooltipForNextFrame(flagRenderInfo.tooltip(), mouseX, mouseY);
             }
 
             // TODO: maybe render the flag in the future
@@ -106,9 +107,9 @@ public class OnlineServerEntryMixin {
         ResourceLocation textureId = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/flags/" + flagRenderInfo.countryCode() + ".png");
 
         //RenderSystem.enableBlend();
-        guiGraphics.pose().pushPose();
-        guiGraphics.blit(RenderType::guiTextured, textureId, startingX, startingY, 0.0F, 0.F, width, height, width, height);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().pushMatrix();
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, textureId, startingX, startingY, 0.0F, 0.F, width, height, width, height);
+        guiGraphics.pose().popMatrix();
 
         if (Config.cfg.flagBorder) {
             guiGraphics.renderOutline(startingX - 1, startingY - 1, width + 2, height + 2, Config.cfg.borderColor.toARGB());
@@ -117,12 +118,12 @@ public class OnlineServerEntryMixin {
         //RenderSystem.disableBlend();
 
         if (mouseX >= startingX && mouseX <= startingX + width && mouseY >= startingY && mouseY <= startingY + height) {
-            screen.setTooltipForNextRenderPass(flagRenderInfo.tooltip());
+            guiGraphics.setTooltipForNextFrame(flagRenderInfo.tooltip(), mouseX, mouseY);
         }
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen;setTooltipForNextRenderPass(Lnet/minecraft/network/chat/Component;)V", ordinal = 0, shift = At.Shift.AFTER), method = "render")
-    public void onSetTooltip(GuiGraphics guiGraphics, int $$1, int $$2, int $$3, int $$4, int $$5, int $$6, int $$7, boolean $$8, float $$9, CallbackInfo ci) {
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;setTooltipForNextFrame(Lnet/minecraft/network/chat/Component;II)V", ordinal = 0, shift = At.Shift.AFTER), method = "render")
+    public void onSetTooltip(GuiGraphics guiGraphics, int $$1, int $$2, int $$3, int $$4, int $$5, int mouseX, int mouseY, boolean $$8, float $$9, CallbackInfo ci) {
         if (Config.cfg.flagPosition == FlagPosition.TOOLTIP_PING) {
             APIResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
             FlagRenderInfo flagRenderInfo = ServerCountryFlags.getFlagRenderInfo(apiResponse);
@@ -134,7 +135,7 @@ public class OnlineServerEntryMixin {
             List<FormattedCharSequence> newTooltip = new ArrayList<>(TooltipUtils.getTooltipOfScreenOrEmpty(screen));
             newTooltip.add(Component.literal(" ").getVisualOrderText());
             newTooltip.addAll(flagRenderInfo.tooltip());
-            screen.setTooltipForNextRenderPass(newTooltip);
+            guiGraphics.setTooltipForNextFrame(newTooltip, mouseX, mouseY);
         }
     }
 }
