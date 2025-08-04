@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_18",
   "client": [
     "JoinMultiplayerScreenMixin",
-    "LanguageManagerMixin",
     "OnlineServerEntryMixin"
   ],
   "injectors": {

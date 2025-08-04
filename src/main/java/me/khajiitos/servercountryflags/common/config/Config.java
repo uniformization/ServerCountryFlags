@@ -6,7 +6,6 @@ import me.khajiitos.servercountryflags.common.util.FlagPosition;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
-import net.minecraft.client.resources.language.LanguageManager;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -27,43 +26,16 @@ public class Config {
         public boolean reloadOnRefresh = false;
 
         @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
-        public boolean showDistance = true;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.locale")
-        public boolean useKm = true;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.locale")
-        public boolean forceEnglish = false;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
         public boolean displayUnknownFlag = true;
 
         @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
-        public boolean displayCooldownFlag = true;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
         public boolean showDistrict = false;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
-        public boolean showISP = false;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
-        public boolean mapButton = true;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
-        public boolean mapButtonRight = true;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
-        public boolean showHomeOnMap = false;
 
         @ConfigEntry(configCategory = "servercountryflags.config.category.preferences")
         public boolean resolveRedirects = true;
 
         @ConfigEntry(configCategory = "servercountryflags.config.category.preferences", stringValues = {"left", "right", "behindName", "bottomRight"})
         public FlagPosition flagPosition = FlagPosition.BEHIND_NAME;
-
-        @ConfigEntry(configCategory = "servercountryflags.config.category.preferences", requiredMod = "serverbrowser")
-        public boolean serverBrowserIntegration = true;
     }
 
     private static File configDirectory;
@@ -165,17 +137,6 @@ public class Config {
     // We just want to suppress the "condition always true" warning
     @SuppressWarnings("all")
     private static void afterLoad() {
-        if (cfg.forceEnglish) {
-            ServerCountryFlags.updateAPILanguage(null);
-        } else {
-            LanguageManager languageManager = Minecraft.getInstance().getLanguageManager();
-            // IntelliJ claims that languageManager will never be null
-            // but that's actually not the case
-            if (languageManager != null) {
-                ServerCountryFlags.updateAPILanguage(languageManager.getSelected());
-            }
-        }
-
         // So that the map button appears/disappears without having to reopen the screen
         Screen screen = Minecraft.getInstance().screen;
         if (screen instanceof JoinMultiplayerScreen) {

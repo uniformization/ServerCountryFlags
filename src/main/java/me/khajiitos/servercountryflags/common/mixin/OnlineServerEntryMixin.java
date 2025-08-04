@@ -1,8 +1,8 @@
 package me.khajiitos.servercountryflags.common.mixin;
 
+import com.maxmind.geoip2.model.CityResponse;
 import me.khajiitos.servercountryflags.common.ServerCountryFlags;
 import me.khajiitos.servercountryflags.common.config.Config;
-import me.khajiitos.servercountryflags.common.util.APIResponse;
 import me.khajiitos.servercountryflags.common.util.FlagPosition;
 import me.khajiitos.servercountryflags.common.util.FlagRenderInfo;
 import me.khajiitos.servercountryflags.common.util.TooltipUtils;
@@ -43,7 +43,7 @@ public class OnlineServerEntryMixin {
     @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V", ordinal = 0), method = "render", index = 2)
     public int serverNameX(int oldX) {
         if (Config.cfg.flagPosition == FlagPosition.BEHIND_NAME) {
-            APIResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
+            CityResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
             FlagRenderInfo renderInfo = ServerCountryFlags.getFlagRenderInfo(apiResponse);
 
             if (renderInfo != null) {
@@ -56,7 +56,7 @@ public class OnlineServerEntryMixin {
 
     @Inject(at = @At("TAIL"), method = "render")
     public void render(GuiGraphics guiGraphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo info) {
-        APIResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
+        CityResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
         FlagRenderInfo flagRenderInfo = ServerCountryFlags.getFlagRenderInfo(apiResponse);
 
         if (flagRenderInfo == null) {
@@ -125,7 +125,7 @@ public class OnlineServerEntryMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;setTooltipForNextFrame(Lnet/minecraft/network/chat/Component;II)V", ordinal = 0, shift = At.Shift.AFTER), method = "render")
     public void onSetTooltip(GuiGraphics guiGraphics, int $$1, int $$2, int $$3, int $$4, int $$5, int mouseX, int mouseY, boolean $$8, float $$9, CallbackInfo ci) {
         if (Config.cfg.flagPosition == FlagPosition.TOOLTIP_PING) {
-            APIResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
+            CityResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
             FlagRenderInfo flagRenderInfo = ServerCountryFlags.getFlagRenderInfo(apiResponse);
 
             if (flagRenderInfo == null) {

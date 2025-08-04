@@ -39,6 +39,10 @@ dependencies {
     }
 
     modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
+
+    implementation include("com.maxmind.db:maxmind-db:3.2.0")
+    implementation include("com.maxmind.geoip2:geoip2:4.3.1")
+    implementation include("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2") // required because maxmind-db crashes without it
 }
 
 processResources {
