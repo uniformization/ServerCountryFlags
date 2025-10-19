@@ -8,6 +8,7 @@ import me.khajiitos.servercountryflags.common.util.FlagRenderInfo;
 import me.khajiitos.servercountryflags.common.util.TooltipUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractSelectionList;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.multiplayer.ServerData;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ServerSelectionList.OnlineServerEntry.class)
-public class OnlineServerEntryMixin {
+public abstract class OnlineServerEntryMixin extends ServerSelectionList.Entry {
 
     @Shadow
     @Final
@@ -40,7 +41,7 @@ public class OnlineServerEntryMixin {
 
     @Shadow @Final private Minecraft minecraft;
 
-    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V", ordinal = 0), method = "render", index = 2)
+    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V", ordinal = 0), method = "renderContent", index = 2)
     public int serverNameX(int oldX) {
         if (Config.cfg.flagPosition == FlagPosition.BEHIND_NAME) {
             CityResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
@@ -54,8 +55,8 @@ public class OnlineServerEntryMixin {
         return oldX;
     }
 
-    @Inject(at = @At("TAIL"), method = "render")
-    public void render(GuiGraphics guiGraphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo info) {
+    @Inject(at = @At("TAIL"), method = "renderContent")
+    public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo info) {
         CityResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
         FlagRenderInfo flagRenderInfo = ServerCountryFlags.getFlagRenderInfo(apiResponse);
 
@@ -64,8 +65,8 @@ public class OnlineServerEntryMixin {
         }
 
         if (Config.cfg.flagPosition == FlagPosition.TOOLTIP_SERVER_NAME) {
-            int serverNameStartX = x + 35;
-            int serverNameStartY = y + 1;
+            int serverNameStartX = getX() + 35;
+            int serverNameStartY = getY() + 1;
 
             int serverNameWidth = this.minecraft.font.width(this.serverData.name);
             int serverNameHeight = 8;
@@ -87,20 +88,20 @@ public class OnlineServerEntryMixin {
         int startingX, startingY;
         switch (Config.cfg.flagPosition) {
             case LEFT -> {
-                startingX = x - width - 6;
-                startingY = y + (entryHeight / 2) - (height / 2);
+                startingX = getX() - width - 6;
+                startingY = getY() + (getHeight() / 2) - (height / 2);
             }
             case RIGHT -> {
-                startingX = x + entryWidth + 10;
-                startingY = y + (entryHeight / 2) - (height / 2);
+                startingX = getX() + getWidth() + 10;
+                startingY = getY() + (getHeight() / 2) - (height / 2);
             }
             case BEHIND_NAME -> {
-                startingX = x + 35;
-                startingY = y + 1;
+                startingX = getX() + 35;
+                startingY = getY() + 1;
             }
             default -> {
-                startingX = x + entryWidth - width - 6;
-                startingY = y + entryHeight - height - 4;
+                startingX = getX() + getWidth() - width - 6;
+                startingY = getY() + getHeight() - height - 4;
             }
         }
 
@@ -112,7 +113,7 @@ public class OnlineServerEntryMixin {
         guiGraphics.pose().popMatrix();
 
         if (Config.cfg.flagBorder) {
-            guiGraphics.renderOutline(startingX - 1, startingY - 1, width + 2, height + 2, Config.cfg.borderColor.toARGB());
+            guiGraphics.submitOutline(startingX - 1, startingY - 1, width + 2, height + 2, Config.cfg.borderColor.toARGB());
         }
 
         //RenderSystem.disableBlend();
@@ -122,8 +123,8 @@ public class OnlineServerEntryMixin {
         }
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;setTooltipForNextFrame(Lnet/minecraft/network/chat/Component;II)V", ordinal = 0, shift = At.Shift.AFTER), method = "render")
-    public void onSetTooltip(GuiGraphics guiGraphics, int $$1, int $$2, int $$3, int $$4, int $$5, int mouseX, int mouseY, boolean $$8, float $$9, CallbackInfo ci) {
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;setTooltipForNextFrame(Lnet/minecraft/network/chat/Component;II)V", ordinal = 0, shift = At.Shift.AFTER), method = "renderContent")
+    public void onSetTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo info) {
         if (Config.cfg.flagPosition == FlagPosition.TOOLTIP_PING) {
             CityResponse apiResponse = ServerCountryFlags.servers.get(serverData.ip);
             FlagRenderInfo flagRenderInfo = ServerCountryFlags.getFlagRenderInfo(apiResponse);
