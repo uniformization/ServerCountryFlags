@@ -3,9 +3,6 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
-
 base {
     archivesName = mod_id + "-" + mod_version + "-" + minecraft_version
 }
@@ -41,7 +38,11 @@ dependencies {
 
     implementation include("com.maxmind.db:maxmind-db:3.2.0")
     implementation include("com.maxmind.geoip2:geoip2:4.3.1")
-    implementation include("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2") // required because maxmind-db crashes without it
+
+    // required because maxmind-db crashes without it
+    implementation include("com.fasterxml.jackson.core:jackson-databind:2.19.2")
+    implementation include("com.fasterxml.jackson.core:jackson-core:2.19.2")
+    implementation include("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2")
 }
 
 processResources {
@@ -58,6 +59,11 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar.finalizedBy('remapJar')

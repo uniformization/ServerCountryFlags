@@ -13,9 +13,8 @@ import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -105,7 +104,7 @@ public abstract class OnlineServerEntryMixin extends ServerSelectionList.Entry {
             }
         }
 
-        ResourceLocation textureId = ResourceLocation.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/flags/" + flagRenderInfo.countryCode() + ".png");
+        Identifier textureId = Identifier.fromNamespaceAndPath(ServerCountryFlags.MOD_ID, "textures/gui/flags/" + flagRenderInfo.countryCode() + ".png");
 
         //RenderSystem.enableBlend();
         guiGraphics.pose().pushMatrix();
@@ -113,7 +112,7 @@ public abstract class OnlineServerEntryMixin extends ServerSelectionList.Entry {
         guiGraphics.pose().popMatrix();
 
         if (Config.cfg.flagBorder) {
-            guiGraphics.submitOutline(startingX - 1, startingY - 1, width + 2, height + 2, Config.cfg.borderColor.toARGB());
+            guiGraphics.renderOutline(startingX - 1, startingY - 1, width + 2, height + 2, Config.cfg.borderColor.toARGB());
         }
 
         //RenderSystem.disableBlend();

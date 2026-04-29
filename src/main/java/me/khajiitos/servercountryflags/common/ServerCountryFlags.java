@@ -14,7 +14,7 @@ import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.client.multiplayer.resolver.ServerAddressResolver;
 import net.minecraft.client.multiplayer.resolver.ServerRedirectHandler;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.FormattedCharSequence;
@@ -56,10 +56,10 @@ public class ServerCountryFlags {
 		Config.init();
 		Minecraft.getInstance().execute(() -> {
 			ResourceManager resourceManager =  Minecraft.getInstance().getResourceManager();
-			Map<ResourceLocation, Resource> resourceLocations = resourceManager.listResources("textures/gui/flags", path -> true);
+			Map<Identifier, Resource> resourceLocations = resourceManager.listResources("textures/gui/flags", path -> true);
 
 			Thread flagThread = new Thread(() -> {
-				for (Map.Entry<ResourceLocation, Resource> entry : resourceLocations.entrySet()) {
+				for (Map.Entry<Identifier, Resource> entry : resourceLocations.entrySet()) {
 					if (!entry.getKey().getNamespace().equals(MOD_ID)) {
 						continue;
 					}
