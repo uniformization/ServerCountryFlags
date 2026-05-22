@@ -19,7 +19,7 @@ public class Config {
         @ConfigEntry(configCategory = "servercountryflags.config.category.border")
         public boolean flagBorder = true;
 
-        @ConfigEntry(configCategory = "servercountryflags.config.category.border")
+        //@ConfigEntry(configCategory = "servercountryflags.config.category.border")
         public Color borderColor = new Color(65, 65, 65, 255);
 
         @ConfigEntry(configCategory = "servercountryflags.config.category.border")
@@ -112,8 +112,8 @@ public class Config {
                                     break;
                                 }
                             }
-                        } else if (field.getType() == Color.class) {
-                            field.set(cfg, Color.fromString(propertiesValue));
+                        //} else if (field.getType() == Color.class) {
+                        //    field.set(cfg, Color.fromString(propertiesValue));
                         } else {
                             ServerCountryFlags.LOGGER.warn("Bug: unsupported config type " + field.getType().getSimpleName());
                         }

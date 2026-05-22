@@ -78,13 +78,13 @@ public class ClothConfigScreenMaker {
                             .setSaveConsumer(newValue -> setCfgString(field, newValue))
                             .build());
                 }
-            } else if (field.getType() == Color.class) {
-                category.addEntry(entryBuilder.startColorField(name, ((Color)field.get(Config.cfg)).toARGB())
-                                .setAlphaMode(true)
-                                .setTooltip(description)
-                                .setDefaultValue(((Color)field.get(Config.DEFAULT)).toARGB())
-                                .setSaveConsumer(newValue -> setCfgColor(field, newValue))
-                        .build());
+            //} else if (field.getType() == Color.class) {
+            //    category.addEntry(entryBuilder.startColorField(name, ((Color)field.get(Config.cfg)).toARGB())
+            //                    .setAlphaMode(true)
+            //                    .setTooltip(description)
+            //                    .setDefaultValue(((Color)field.get(Config.DEFAULT)).toARGB())
+            //                    .setSaveConsumer(newValue -> setCfgColor(field, newValue))
+            //            .build());
             } else if (field.getType().isEnum() && field.get(Config.cfg) instanceof Enum<?> enumValue) {
                 category.addEntry(entryBuilder.startEnumSelector(name, (Class<Enum<?>>) enumValue.getDeclaringClass(), enumValue)
                                 .setEnumNameProvider(anEnum -> Component.translatable(String.format("servercountryflags.config.field.%s.value.%s", fieldName, anEnum.toString())))
